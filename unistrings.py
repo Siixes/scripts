@@ -52,12 +52,12 @@ def checkEvens(fname, low, high):
 		# if we're seeing an Ascii character that will be the beginning of a new potential string
 		else:
 			if isLanguage(inBytes, low, high):
-				strings.append("\u{0}".format(binascii.hexlify(byte)))
+				strings.append("\u{0}".format(binascii.hexlify(inBytes)))
 		prevBytes = inBytes
 		inBytes = f.read(2)
 	# now just return the strings that are 4 or more characters long
 	#print strings
-	return [x for x in strings if (len(x) > 3)]
+	return [x for x in strings if (len(x) > 11)]
 
 
 def checkOdds(fname, low, high):
@@ -79,12 +79,12 @@ def checkOdds(fname, low, high):
 		# if we're seeing an Ascii character that will be the beginning of a new potential string
 		else:
 			if isLanguage(inBytes, low, high):
-				strings.append("\u{0}".format(binascii.hexlify(byte)))
+				strings.append("\u{0}".format(binascii.hexlify(inBytes)))
 		prevBytes = inBytes
 		inBytes = f.read(2)
 	# now just return the strings that are 4 or more characters long
 	# print strings
-	return [x for x in strings if (len(x) > 3)]
+	return [x for x in strings if (len(x) > 11)]
 
 
 def checkLanguage(fname, low, high):
@@ -111,7 +111,9 @@ def main(fname):
 	for entry in asciiStrings:
 		print entry
 	for lang in languageResults:
-		print language, languageResults[language]
+		print "\n\n{0}".format(lang)
+		for string in languageResults[lang]:
+			print string.decode('unicode-escape')
 
 if __name__ == '__main__':
 	fname = sys.argv[1]
