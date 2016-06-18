@@ -16,6 +16,8 @@ Usage: python unistrings.py <filename>
 
 import sys
 import binascii
+import argparse
+
 
 # isLanguage checks if a series of bytes is within a language range
 def isLanguage(inBytes, low, high):
@@ -85,9 +87,13 @@ def checkLanguage(fname, low, high):
 	odds = checkLangBytes(fname, low, high, 1)
 	return evens + odds
 
-def main(fname):
-	# first we build our list of Ascii strings
-	asciiStrings = checkAscii(fname)
+def main(args):
+	fname = args.fname
+	asciiStrings = []
+	# first we build our list of Ascii strings if the Ascii flag is enabled
+	if (args.asc):
+		asciiStrings = checkAscii(fname)
+	
 	# list of supported languages
 	languages = {'Cyrillic': {'Low':0x0400, 'High':0x052F}, 'LatinExtendedA': {'Low': 0x0100, 'High':0x017F}, 'LatinExtendedB': {'Low':0x0180, 'High':0x024F}, 'GreekCoptic': {'Low':0x0370, 'High':0x03FF}, 'Armenian': {'Low':0x0530, 'High':0x058F}, 'Hebrew': {'Low':0x0590, 'High':0x05FF}, 'Arabic':{'Low':0x0600, 'High':0x06FF}, 'Syriac': {'Low':0x0700, 'High':0x074F}, 'Thaana': {'Low':0x0780, 'High':0x07BF}, 'Devanagari':{'Low':0x0900, 'High':0x097F}, 'Bengali':{'Low':0x0980, 'High':0x09FF}, 'Gurmukhi':{'Low':0x0A00, 'High':0x0A7F}, 'Thai':{'Low':0x0E00, 'High':0x0E7F}, 'Lao':{'Low':0x0E80, 'High':0x0EFF}, 'Tibetan':{'Low':0x0F00, 'High':0x0FFF}, 'Georgian':{'Low':0x10A0, 'High':0x10FF}, 'Hangul Jamo':{'Low':0x1100, 'High':0x11FF}, 'Greek':{'Low':0x1F00, 'High':0x1FFF}, 'Kangxi':{'Low':0x2F00, 'High':0x2FDF}, 'Katakana':{'Low':0x30A0, 'High':0x30FF}, 'Hangul':{'Low':0xAC00, 'High':0xD7AF}}
 	languageResults = {}
@@ -105,10 +111,19 @@ def main(fname):
 	for lang in languageResults:
 		# if there are results in the language to print out
 		if (len(languageResults[lang]) > 0):
-			print "\n\n{0}".format(lang)
+			print "{0} - {1} strings".format(lang, len(languageResults[lang]))
 			for string in languageResults[lang]:
 				print string.decode('unicode-escape')
+		# line break to separate languages	
+		print '\n'
 
 if __name__ == '__main__':
-	fname = sys.argv[1]
-	main(fname)
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-f", "--filename", dest='fname', help="File to extract strings from")
+	parser.add_argument("-a", "--ascii", dest='asc', action='store_true', help="Enable dumping of ascii characters")
+	args = parser.parse_args()
+	# if they gave us a filename
+	if (args.fname):
+		main(args)
+	else:
+		print "[-] Minimum Usage: python unistrings.py -f <filename>"
