@@ -119,11 +119,7 @@ def main(args):
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument("-f", "--filename", dest='fname', help="File to extract strings from")
+	parser.add_argument("-f", "--filename", dest='fname', required=True, help="File to extract strings from")
 	parser.add_argument("-a", "--ascii", dest='asc', action='store_true', help="Enable dumping of ascii characters")
 	args = parser.parse_args()
-	# if they gave us a filename
-	if (args.fname):
-		main(args)
-	else:
-		print "[-] Minimum Usage: python unistrings.py -f <filename>"
+	main(args)
