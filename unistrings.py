@@ -9,7 +9,13 @@ __date__ = '2016/06/15'
 I am only implementing an idea of those smarter than myself. All credit goes out to the Bigfoot Particle.
 It is currently not optimal from a performance-perspective, but works. Use at your own risk.
 
-Usage: python unistrings.py <filename>
+Usage: python unistrings.py <parameters>
+
+Parameters:
+	-f <filename>  (required)
+	-s   - shows currently supported languages and exits
+	-a   - includes Ascii searches in the binary, similar to Linux 'strings' utility
+	-l <language> - only display results for the specified language. If you are searching for multiple languages, input them separated by commas with no spaces (e.g. "-l Cyrillic,Hebrew,Greek")
 
 """
 
