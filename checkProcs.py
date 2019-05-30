@@ -2,7 +2,7 @@
 Title: checkProcs.py
 Author: Kyle
 Description: this is a quick and dirty script used to dump all of the processes from a RAM capture, hash them, and submit the hashes to VirusTotal to see if there are any hits
-this is using swalker's VirusTotal api key which is limited to 4 queries per minute, feel free to substitute your own. 
+this is built to use a private VirusTotal api key which is limited to 4 queries per minute, feel free to substitute your own. 
 if your key is not limited to 4/minute, feel free to delete "time.sleep(15)" in main() to speed that part up
 Usage: python checkProcs.py -p <Volatility profile> -l <path to volatility> -f <path to RAM capture>
 """
@@ -68,8 +68,8 @@ def md5Processes(args):
 
 def lookupHash(md5):
 	url = "https://www.virustotal.com/vtapi/v2/file/report"
-	# swalker's VT creds below, replace with your own creds if you'd like
-	parameters = {"resource": md5, "apikey": "fb1c52587de0d9d4cc5cf889959be259a9f3516610f2d811eef47eef58eeb892"}
+	# enter your creds below
+	parameters = {"resource": md5, "apikey": "<insert api key here>"}
 	data = urllib.urlencode(parameters)
 	req = urllib2.Request(url, data)
 	response = urllib2.urlopen(req)
@@ -114,7 +114,7 @@ def main(args):
 		result = lookupHash(entry)
 		outfile.write("%s\n" % (result))
 		i += 1
-		# we're using swalker's private key, so we sleep for 15 seconds between each call to VirusTotal
+		# if you're using a generic private key sleep for 15 seconds between each call to VirusTotal
 		time.sleep(15)
 
 if __name__ == '__main__':
