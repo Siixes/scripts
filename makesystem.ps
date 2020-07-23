@@ -1,0 +1,60 @@
+# first line installs chocolatey, comment out if this is already installed
+Echo "Installing Chocolatey"
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+# List of Chocolatey packages to install
+Echo "Installing Chocolatey packages"
+choco install -y sublimetext3
+choco install -y googlechrome
+choco install -y firefox
+choco install -y 7zip
+choco install -y vlc
+choco install -y git
+choco install -y putty
+choco install -y sysinternals
+choco install -y jdk8
+choco install -y gimp
+choco install -y awscli
+choco install -y winpcap
+choco install -y wireshark
+choco install -y golang
+choco install -y irfanview
+choco install -y osquery
+choco install -y terraform
+choco install -y docker
+choco install -y python3
+choco install -y regshot
+
+# Now for some python packages I normally install. Is it best practice to install these globally instead of in virtual envs? No. Do I care for testing? No.
+Echo "Gotta restart system before you can use pip3 to install python packages"
+#pip3 install boto3
+#pip3 install dnspython
+#pip3 install jupyter
+#pip3 install requests
+
+# Create folder on desktop for game analysis results
+If(!(test-path $HOME\Desktop\Results))
+{
+	New-Item -ItemType Directory -Force -Path $HOME\Desktop\Results
+}
+
+# Once we have tools and EGS, create a restore point to move back to between games
+# A note per https://techsupportexpert.com/restore-pc-system-restore-point/ 
+#     Restoring from a restore point won’t affect your personal files, 
+#     but it will remove apps, drivers, and updates that were installed 
+#     after the restore point was created.
+# So we can use this restore point between analysis of games, but can't rely on it
+# to clean out remnant files/registry keys/etc that could be left unless we reformat
+# the disk and start with a clean OS again.
+Echo "Enabling System restore"
+Enable-ComputerRestore -Drive "C:\"
+
+Echo "Creating restore point"
+Checkpoint-Computer -Description "ToolsAnd" -RestorePointType "MODIFY_SETTINGS"
+
+# parting notes
+Echo "Last you will want to restart your computer and install Epic Game Store to begin the journey!"
+
+
+
+
